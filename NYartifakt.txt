@@ -1,0 +1,70 @@
+con <- dbConnect(RMySQL::MySQL(),dbname="personer", host="localhost",port=3306, user="root" )
+ dataframe <- dbGetQuery(con,"SELECT * FROM Person")
+
+dataframe <- dbGetQuery(con,"SELECT * FROM Bil")
+
+dataframe <- dbGetQuery(con,"SELECT * FROM City")
+
+dataframe[order(datafram$pnr),] //sorterar efter personnummer
+
+
+system.time(replicate(100000,datafram[order(datafram$pnr),])) //Mäter tiden på att sortera efter personnummer
+
+
+ system.time(replicate(10, hist(dataframe$pnr))) //Mäter tiden på att göra ett diagram.
+
+
+> dataframe[order(-dataframe$alder,dataframe$pnr),] // sorterar efter högstålder
+
+
+
+hist(xlab="Alder",dataframe$alder) // Gör ett diagram med x axeln som heter alder
+
+ system.time(replicate(1000,dataframe[order(-dataframe$alder),]))// Mäter tiden att sortera
+
+ system.time(replicate(1000,hist(xlab="Regnr",dataframe$regnr)))// Mäter tiden för att göra ett diagram
+ system.time(replicate(1000,hist(xlab="Postnr",dataframe$postnr)))// Mäter tiden för att göra ett diagram
+
+RMONGO
+
+mongo <- mongoDbConnect("Persons")
+
+mongo <- mongoDbConnect("Cars")
+
+mongo <- mongoDbConnect("Cities")
+
+ options(max.print=1000000) // Gör så att man kan printa ut mer rader
+
+ result=dbGetQuery(mongo, "Person","{}",0,10000000)// hämtar allt i en collection
+> print(result)
+
+
+ result=dbGetQuery(mongo, "Car","{}",0,10000000)// hämtar allt i en collection
+> print(result)
+
+ result=dbGetQuery(mongo, "City","{}",0,10000000)// hämtar allt i en collection
+> print(result)
+
+result[order(result$pnr),] //sorterar efter personummer.
+
+ system.time(replicate(1000,hist(xlab="Regnr",result$regnr))) // Mäter tiden för att göra ett diagram
+ system.time(replicate(1000,hist(xlab="Postnr",result$postnr)))// Mäter tiden för att göra ett diagram
+
+
+
+Rmongodb
+
+
+> mongo <- mongo.create(host="localhost",db="Persons") // Öppnar en koppling
+ mongo <- mongo.create(host="localhost",db="Cars")
+ mongo <- mongo.create(host="localhost",db="Cities")
+
+> mongo.find.all(mongo,"Persons.Person",query='{}') // hämtar allt i en collection
+
+mongo.find.all(mongo,"Cars.Car",query='{}') 
+mongo.find.all(mongo,"Cities.City",query='{}') 
+for(i in 1:43){print (system.time(replicate(10,mongo.find.all(mongo,"Cities.City",query='{}'))))}
+
+hist(system.time(replicate(100000,resultat))) // Diagram
+
+for(i in 1:43){print (system.time(replicate(10,mongo.find.all(mongo,"Cars.Car",query='{}'))))} // Forloop
